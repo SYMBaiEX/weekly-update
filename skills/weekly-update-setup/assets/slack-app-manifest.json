@@ -1,14 +1,8 @@
 {
   "display_information": {
     "name": "Weekly Update Assistant",
-    "description": "Personal assistant that reads your Slack activity to draft a weekly update. Installed per-user; uses your own Slack permissions.",
+    "description": "Personal assistant that reads your Slack activity to draft a weekly update. Uses your own Slack permissions.",
     "background_color": "#1d1c1d"
-  },
-  "features": {
-    "bot_user": {
-      "display_name": "Weekly Update Assistant",
-      "always_online": false
-    }
   },
   "oauth_config": {
     "scopes": {

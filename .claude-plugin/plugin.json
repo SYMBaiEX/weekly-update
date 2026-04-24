@@ -1,6 +1,6 @@
 {
   "name": "weekly-update",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "Autonomously consolidates a weekly team update every Friday from Slack, Google Drive, and Gmail, and drops it as a draft in a chosen Slack channel for review.",
   "author": {
     "name": "ZipHQ"
