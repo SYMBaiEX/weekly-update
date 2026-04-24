@@ -6,10 +6,7 @@
   "plugins": [
     {
       "name": "weekly-update",
-      "source": {
-        "source": "github",
-        "repo": "SYMBaiEX/weekly-update"
-      },
+      "source": "./",
       "description": "Autonomously drafts your Friday weekly update from Slack, Google Drive, and Gmail, and posts it as a draft in a Slack channel for review."
     }
   ]
