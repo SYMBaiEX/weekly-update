@@ -19,15 +19,51 @@ Perform these steps in order. Use `AskUserQuestion` when available; otherwise as
 
 Read `~/.weekly-update/config.json`. If it exists, show the current settings and ask whether the user wants to *edit* (change specific fields), *replace* (start fresh), or *cancel*. If editing, only re-ask the fields they want to change.
 
-### 2. Verify connectors
+### 2. Connect Slack (one-time)
 
-The plugin relies on the user's existing Claude connectors — it does NOT ship its own MCP credentials. Before configuring sources, confirm with the user that these connectors are connected in their Claude settings:
+Slack is not a default Claude connector, so the plugin bundles its own Slack MCP server (`@modelcontextprotocol/server-slack`, declared in the plugin's `.mcp.json`). For it to work, the user needs a personal Slack user token — this is created once per teammate and stored locally. The token inherits the user's own Slack permissions, so they automatically have access to every channel they can already see.
 
-- **Slack** — required (both as a source and as the draft destination)
+Check whether `~/.weekly-update/config.json` already contains `slack.user_token`. If yes, skip this step. Otherwise walk the user through it:
+
+**Step 2a — Copy the manifest to their clipboard (automatic).** The plugin ships a pre-filled Slack app manifest at `skills/weekly-update-setup/assets/slack-app-manifest.json` (relative to the plugin dir; use `/Users/symbiex/Library/Application Support/Claude/local-agent-mode-sessions/e4a5ba64-c95d-4794-aed2-27652a66f8d1/4897d759-d718-4f90-a5e5-1ce8bbf41848/rpm/plugin_018pLNd4CGF8vEEmyztWR7fi`-style path substitution if the runtime exposes `${CLAUDE_PLUGIN_ROOT}`; otherwise resolve via the skill's own file path).
+
+Run the right clipboard command for the platform:
+- macOS: `cat <manifest-path> | pbcopy`
+- Linux (X11): `cat <manifest-path> | xclip -selection clipboard`
+- Linux (Wayland): `cat <manifest-path> | wl-copy`
+- Windows: `Get-Content <manifest-path> | Set-Clipboard`
+
+Then tell the user: "I've copied the Slack app manifest to your clipboard."
+
+**Step 2b — Open the Slack app creation page.** Run `open https://api.slack.com/apps?new_app=1` (macOS) / `xdg-open` (Linux) / `start` (Windows).
+
+**Step 2c — Tell the user exactly what to click.** Use this script verbatim so the steps match what they see on screen:
+
+> 1. Click **From a manifest**
+> 2. Pick your **ZipHQ** workspace, click **Next**
+> 3. Paste with **⌘V** (macOS) or **Ctrl+V** — the manifest is already on your clipboard
+> 4. Click **Next**, then **Create**
+> 5. In the left sidebar, click **Install App** → **Install to ZipHQ**
+> 6. Approve the permissions
+> 7. On the resulting page, copy the **User OAuth Token** (starts with `xoxp-`)
+> 8. Paste it back here
+
+**Step 2d — Capture the token.** Prompt: "Paste your Slack User OAuth Token (xoxp-...):". Validate it starts with `xoxp-` and is >40 chars. If not, re-prompt with a clearer hint.
+
+**Step 2e — Capture the team ID.** Right after the token, the user can either paste their Slack team ID (from the URL `https://app.slack.com/client/TXXXXX/...`) or let the plugin auto-detect by calling `auth.test` with the token. Prefer auto-detect. Store the result.
+
+**Step 2f — Store and wire up.** Write the token to `~/.weekly-update/config.json` under `slack.user_token` and `slack.team_id`. Also write them to the user's Claude Code env so the MCP server picks them up on next launch — the `.mcp.json` references `${WEEKLY_UPDATE_SLACK_TOKEN}` and `${WEEKLY_UPDATE_SLACK_TEAM_ID}`. Export them to `~/.claude/env` (or the platform equivalent) so they persist across sessions.
+
+Tell the user: "Slack connected. You won't need to do this again."
+
+### 2.5. Verify Google Drive & Gmail connectors
+
+These are native Claude connectors. Confirm with the user that they're enabled in Settings → Connectors:
+
 - **Google Drive** — required only if the user wants Drive as a source
 - **Gmail** — required only if the user wants email as a source
 
-If a required connector is missing, pause setup and point the user to Settings → Connectors. Do not proceed with a source the user cannot authenticate.
+If a required connector is missing, pause and point them to Settings → Connectors. Do not proceed with a source the user cannot authenticate.
 
 ### 3. Pick sources
 

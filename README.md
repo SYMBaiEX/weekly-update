@@ -12,11 +12,12 @@ Autonomously drafts your team's Friday status update. Pulls the last 7 days from
 
 Before running setup, connect these in **Claude → Settings → Connectors**:
 
-- **Slack** (required)
 - **Google Drive** (only if you want Drive as a source)
 - **Gmail** (only if you want email as a source)
 
-The plugin itself contains **no credentials, tokens, or secrets**. Authentication lives entirely in your personal connector config — which is why this plugin is safe to share internally and publish to a marketplace.
+Slack is handled by the plugin's bundled MCP server (`@modelcontextprotocol/server-slack`). The setup skill walks you through a **~90-second one-time Slack app install** — it copies the app manifest to your clipboard, opens the Slack app creation page, and prompts you to paste your resulting User OAuth Token. The token is stored locally in `~/.weekly-update/config.json` (chmod 600). Your token inherits your own Slack permissions, so the plugin automatically has access to every channel you can see — nothing extra to invite.
+
+The plugin itself contains **no credentials, tokens, or secrets**. Each teammate creates their own Slack token and connects their own Google/Gmail — which is why this plugin is safe to share internally and publish publicly.
 
 ## Install
 
