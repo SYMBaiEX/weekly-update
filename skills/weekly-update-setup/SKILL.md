@@ -63,7 +63,7 @@ Sources:
   Slack:         #product, #eng-standup, #customers
   Google Drive:  "2026 Project Plans" folder
   Gmail:         label:customer-signal newer_than:7d
-Draft posted to:               #solsymbaiex-drafts (DM)
+Draft posted to:               #my-drafts (DM)
 ```
 
 Ask for explicit "yes, create it" confirmation.
@@ -83,7 +83,7 @@ Create `~/.weekly-update/` (700 perms) and write `config.json`:
   },
   "draft": {
     "channel_id": "D0456",
-    "channel_name": "solsymbaiex-drafts"
+    "channel_name": "my-drafts"
   },
   "schedule": {
     "cron": "0 9 * * 5",
