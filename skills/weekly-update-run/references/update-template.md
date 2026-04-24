@@ -1,48 +1,61 @@
 # Weekly Update Template
 
-Use this exact structure when drafting the weekly update. Keep it scannable — someone should be able to read it in under 60 seconds.
+Use this structure when drafting the weekly update. Skimmable in under 60 seconds. **Only include sections backed by a configured source** — don't emit "Customer signal" if Gmail wasn't configured, don't emit "Channel activity" if Slack wasn't configured, don't emit "Meetings" if Calendar wasn't configured.
 
 ```
 :memo: *Weekly update draft — {{start_date}} → {{end_date}}*
 _Review, edit, and forward when ready._
 
 *TL;DR*
-{{One-sentence summary of the week. What's the single most important thing a reader needs to know?}}
+{{One sentence. The single most important thing a reader needs to know this week.}}
 
 *🏆 Wins*
-• {{Thing that shipped or landed. Concrete outcome, not activity.}}
+• {{Thing that shipped or landed. Outcome, not activity.}}
 • {{...}}
 
 *🛠️ In progress*
-• {{Work underway, with rough % or milestone. Name the owner if it's not the user.}}
+• {{Work underway, with rough % or milestone. Name the owner if not the user.}}
 • {{...}}
 
 *🚧 Blockers & risks*
 • {{What's stuck, why, and who can unstick it. If nothing, write "Nothing this week".}}
 • {{...}}
 
-*📈 Metrics that moved*
-• {{Only include metrics that actually moved this week. Show the delta, not the absolute.}}
+*📅 Meetings & decisions*       ← only if Calendar is a source
+• {{Notable meeting or decision from this week. Who, what, outcome.}}
 • {{...}}
 
-*📣 Customer / external signal*
-• {{Notable customer feedback, external mention, or inbound. From Gmail or Slack.}}
+*📣 Customer / external signal*  ← only if Gmail is a source
+• {{Notable customer feedback, external mention, or inbound.}}
+• {{...}}
+
+*💬 Channel activity*            ← only if Slack is a source
+• {{Key thread, decision, or signal from tracked channels.}}
+• {{...}}
+
+*📈 Metrics that moved*
+• {{Only metrics that actually moved. Show the delta, not the absolute.}}
 • {{...}}
 
 *🙋 Asks*
-• {{What does the user need from the reader? Decisions, intros, review.}}
+• {{What does the user need from the reader? Decisions, intros, reviews.}}
 • {{...}}
 
 *🔜 Next week*
-• {{Top 3 things the user intends to land. Not a wishlist — commitments.}}
-• {{...}}
+• {{Top 3 things the user intends to land. Commitments, not wishes.}}
+• {{If Calendar is a source, incorporate upcoming meetings as context here.}}
 ```
 
-## Rules for drafting
+## Drafting rules
 
-- **Grounded bullets only.** Every bullet must trace to a real Slack message, Drive doc, or email from the pulled material. Don't fill sections for the sake of filling them.
-- **Outcomes over activity.** "Shipped checkout v2 to 100% of users" beats "worked on checkout."
-- **Trim ruthlessly.** If a section would have >5 bullets, pick the top 5 by impact and drop the rest.
-- **No jargon the reader wouldn't recognize.** Expand internal codenames on first use.
-- **Links in context.** When a bullet cites a Slack thread or Drive doc, append a Slack-formatted link: `<url|[thread]>` or `<url|[doc]>`. Don't let raw URLs break the flow.
-- **Empty sections say so.** Write `_Nothing this week_` rather than omitting the heading.
+- **Grounded bullets only.** Every bullet traces to a real source artifact.
+- **Outcomes over activity.** "Shipped checkout v2 to 100%" beats "worked on checkout."
+- **Trim ruthlessly.** Max 5 bullets per section; pick the highest-impact.
+- **Expand internal codenames** on first use — readers may be outside the team.
+- **Links in context.** Slack threads: `<url|[thread]>`. Drive: `<url|[doc]>`. Gmail: `<url|[email]>`. Calendar: `<url|[meeting]>`.
+- **Empty-but-configured sections say `_Nothing this week_`** rather than disappearing. Unconfigured sections disappear entirely.
+- **Metrics only if real.** If the user's sources don't surface metrics, drop the section.
+
+## Section order
+
+Fixed. Do not reorder even if a section is empty-but-configured. Skip (don't placeholder) sections whose source isn't configured.
