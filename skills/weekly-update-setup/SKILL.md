@@ -21,6 +21,40 @@ Read `~/.claude/settings.json`. If `extraKnownMarketplaces["weekly-update"]` exi
 
 This is silent on success. On failure (permissions, corrupt JSON), tell the user once: "Auto-update couldn't be enabled automatically — toggle it in `/plugin` → Marketplaces → weekly-update. Continuing." Never block setup on this.
 
+### 0.5. Make the plugin visible across runtimes (auto-propagation)
+
+A core design goal: **the user installs once in whichever runtime they happen to use first, and the plugin shows up in every other runtime on the same machine automatically.** No re-cloning per runtime, no repeated setup conversations.
+
+The mechanism: maintain a single canonical copy at `~/.weekly-update/plugin/`, and symlink it into each installed runtime's plugin/agent scan path. Symlinks mean updates to the canonical copy propagate instantly to every runtime.
+
+Perform these steps silently unless something fails:
+
+**Step 0.5a — Ensure the canonical clone exists.** If `~/.weekly-update/plugin/` does not exist, `git clone https://github.com/SYMBaiEX/weekly-update.git ~/.weekly-update/plugin`. If it exists and is a git repo, run `git -C ~/.weekly-update/plugin pull --ff-only --quiet` to refresh. Do not block setup if the pull fails — the user may be offline or on a restricted network; just log and continue.
+
+If `git` isn't installed on the user's machine, skip this step gracefully and print: "Couldn't auto-clone (git not found). Other agent runtimes on this machine won't auto-discover the plugin — install git or clone manually if you want cross-runtime availability. Continuing setup." Do not block.
+
+**Step 0.5b — Detect installed agent runtimes.** Check for the presence of these directories (read-only detection; do not create):
+
+| Runtime | Indicator path | Symlink target |
+|---|---|---|
+| Codex CLI / Codex Desktop | `~/.codex/` | `~/.codex/weekly-update` |
+| Cursor (global agents) | `~/.cursor/` | `~/.cursor/weekly-update` |
+| Cline | `~/.cline/` | `~/.cline/weekly-update` |
+| Continue | `~/.continue/` | `~/.continue/weekly-update` |
+
+**Claude Code and Claude Desktop are intentionally skipped** — they manage their own plugin cache via `/plugin install` and would fight a symlink. If the user is running setup inside Claude Code/Desktop, that runtime already has its own working copy.
+
+**Step 0.5c — Create symlinks where appropriate.** For each detected runtime, check if the symlink target exists:
+
+- If it doesn't exist → create symlink: `ln -s ~/.weekly-update/plugin <target>`.
+- If it exists and is already a symlink pointing at `~/.weekly-update/plugin` → leave it alone (idempotent).
+- If it exists and is a symlink pointing elsewhere → ask the user: "Codex already has weekly-update pointing at X. Replace with the canonical copy?" and only replace on yes.
+- If it exists and is a real directory (e.g. the user manually cloned earlier) → ask the user: "Codex has an older manual install of weekly-update. Replace with the canonical auto-updating copy?" and only replace on yes (move to `<target>.bak` first).
+
+**Step 0.5d — Windows note.** If the runtime platform is Windows, symlink creation may require admin privileges or Developer Mode. If `ln -s` (or PowerShell's `New-Item -ItemType SymbolicLink`) fails, fall back to copying the directory and tell the user: "On Windows, cross-runtime auto-propagation uses file copies instead of symlinks — re-run `set up weekly update` after plugin updates to refresh other runtimes." This is annoying but at least not a hard block.
+
+**Step 0.5e — Report briefly.** After symlinking, tell the user in one sentence: "Made weekly-update available to: Codex, Cursor" (list the ones that were linked, skip the current runtime). Skip this message entirely if nothing else was detected.
+
 ### 1. Check for existing config
 
 Read `~/.weekly-update/config.json`. If it exists, show the current settings and ask: *edit* (change specific fields), *replace* (start fresh), or *cancel*. If editing, preserve untouched fields.

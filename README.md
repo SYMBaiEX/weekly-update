@@ -28,26 +28,30 @@ No credentials live in the plugin. No secrets live on disk except whatever Claud
 
 ## Install
 
-### Claude Code / Claude Desktop
+**Install in any one of your agent runtimes — setup auto-propagates the plugin to the others on your machine.** That means you can install via Claude Code, then switch to Codex or Cursor later and it just works. No re-cloning, no re-configuring.
+
+### Easiest — via Claude Code
 
 ```
 /plugin marketplace add SYMBaiEX/weekly-update
 /plugin install weekly-update@weekly-update
+set up weekly update
 ```
 
-### Codex CLI / Codex Desktop
+### Via any AGENTS.md-aware runtime (Codex, Cursor, Cline, Continue)
 
-Clone or symlink this repo into a path Codex scans for `AGENTS.md` — workspace root, or globally at `~/.codex/weekly-update/`:
+Clone once into the runtime's global scan path, then run setup. Setup will relocate the plugin to a canonical path (`~/.weekly-update/plugin/`) and symlink it into every other agent runtime on your machine, so this is a one-time action even if you use multiple runtimes.
 
 ```bash
+# Example for Codex — adjust the target path for your runtime
 git clone https://github.com/SYMBaiEX/weekly-update.git ~/.codex/weekly-update
 ```
 
-Then in Codex, say `set up weekly update` to kick off setup. Codex doesn't yet have native cron; see the `AGENTS.md` for a one-line shell-level scheduling pattern if you want true Friday autonomy.
+Then in that runtime say `set up weekly update`.
 
-### Cursor / Cline / Continue / any AGENTS.md-aware agent
+### How auto-propagation works
 
-Add the repo as a workspace (or clone globally), then invoke with `set up weekly update` and `run weekly update` as natural-language commands. The `AGENTS.md` at the repo root is the entry point for these runtimes.
+The setup skill maintains one canonical copy at `~/.weekly-update/plugin/` and symlinks it into each installed runtime's scan path (`~/.codex/`, `~/.cursor/`, `~/.cline/`, `~/.continue/` — Claude Code/Desktop manage their own cache and are left alone). On each setup run, it `git pull`s the canonical copy so every runtime sees the latest version at once. Windows symlinks fall back to file copies; re-run setup to refresh after updates.
 
 ## Use
 
