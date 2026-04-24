@@ -50,7 +50,7 @@ For each selected source, collect scope:
 - `label:customer-signal newer_than:7d`
 - `from:@bigcustomer.com newer_than:7d`
 - `is:starred newer_than:7d`
-- `in:sent newer_than:7d to:-@ziphq.com` (external sent mail only)
+- `in:sent newer_than:7d -to:(@yourcompany.com)` (external sent mail only — the user fills in their company's domain)
 
 Store the raw query strings — they're evaluated at run time with a sliding 7-day window. If the user wants a simple default, suggest `is:starred newer_than:7d` which reliably catches things they flagged as important.
 
