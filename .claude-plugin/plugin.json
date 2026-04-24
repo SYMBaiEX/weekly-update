@@ -1,0 +1,10 @@
+{
+  "name": "weekly-update",
+  "version": "0.1.0",
+  "description": "Autonomously consolidates a weekly team update every Friday from Slack, Google Drive, and Gmail, and drops it as a draft in a chosen Slack channel for review.",
+  "author": {
+    "name": "AnonFarms"
+  },
+  "keywords": ["weekly-update", "status-report", "slack", "google-drive", "gmail", "automation", "cron"],
+  "license": "MIT"
+}
