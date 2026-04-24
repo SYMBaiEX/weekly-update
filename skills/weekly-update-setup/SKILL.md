@@ -50,7 +50,7 @@ For each selected source, collect scope:
 - `label:customer-signal newer_than:7d`
 - `from:@bigcustomer.com newer_than:7d`
 - `is:starred newer_than:7d`
-- `in:sent newer_than:7d -to:(@yourcompany.com)` (external sent mail only — the user fills in their company's domain)
+- `in:sent newer_than:7d -to:(@yourcompany.com)` — external sent mail only. **Do not make the user type their domain.** At the moment you offer this example, call the Gmail connector's `users.getProfile` (or equivalent "whoami" endpoint) to get the signed-in user's email address, extract the domain after `@`, and substitute it into the example so the user just confirms. If the connector doesn't expose a whoami call, ask the user casually ("what's your work email domain?") rather than making it a blocking field.
 
 Store the raw query strings — they're evaluated at run time with a sliding 7-day window. If the user wants a simple default, suggest `is:starred newer_than:7d` which reliably catches things they flagged as important.
 

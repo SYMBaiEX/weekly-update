@@ -1,6 +1,6 @@
 {
   "name": "weekly-update",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "Autonomously drafts a weekly team update every Friday from Google Drive, Gmail, Google Calendar, and optionally Slack — delivered as a Slack message, a Gmail draft, or a local markdown file.",
   "author": {
     "name": "weekly-update contributors"

@@ -28,10 +28,26 @@ No credentials live in the plugin. No secrets live on disk except whatever Claud
 
 ## Install
 
+### Claude Code / Claude Desktop
+
 ```
 /plugin marketplace add SYMBaiEX/weekly-update
 /plugin install weekly-update@weekly-update
 ```
+
+### Codex CLI / Codex Desktop
+
+Clone or symlink this repo into a path Codex scans for `AGENTS.md` — workspace root, or globally at `~/.codex/weekly-update/`:
+
+```bash
+git clone https://github.com/SYMBaiEX/weekly-update.git ~/.codex/weekly-update
+```
+
+Then in Codex, say `set up weekly update` to kick off setup. Codex doesn't yet have native cron; see the `AGENTS.md` for a one-line shell-level scheduling pattern if you want true Friday autonomy.
+
+### Cursor / Cline / Continue / any AGENTS.md-aware agent
+
+Add the repo as a workspace (or clone globally), then invoke with `set up weekly update` and `run weekly update` as natural-language commands. The `AGENTS.md` at the repo root is the entry point for these runtimes.
 
 ## Use
 
@@ -80,8 +96,13 @@ You can override the default during setup.
 
 ## Platforms
 
-- **Claude Code** — full support including autonomous Friday scheduling.
-- **Claude Desktop** — skills work; scheduling is manual (Desktop has no cron yet). Just say "run weekly update" Friday morning.
+| Runtime | Skills | Autonomous Friday run |
+|---|---|---|
+| Claude Code | ✅ | ✅ via built-in scheduled triggers |
+| Claude Desktop | ✅ | ❌ manual — say "run weekly update" Friday morning |
+| Codex CLI / Desktop | ✅ via AGENTS.md | ❌ manual — or wire a shell cron (example in `AGENTS.md`) |
+| Cursor / Cline / Continue | ✅ via AGENTS.md | ❌ manual |
+| Any MCP-capable agent | ✅ — follow the SKILL.md files directly | depends on runtime |
 
 ## Customizing the template
 
